@@ -2,7 +2,7 @@
   "name": "BBC BASIC Modern Syntax",
   "description": "Syntax highlighting for BBC BASIC",
   "author": "7th software Ltd",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "repository": "https://github.com/sarev/BBC-BASIC-Sublime-Syntax",
   "homepage": "https://github.com/sarev/BBC-BASIC-Sublime-Syntax",
   "dependencies": []
