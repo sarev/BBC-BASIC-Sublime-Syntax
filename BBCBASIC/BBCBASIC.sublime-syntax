@@ -6,7 +6,8 @@
 #
 # These rules were derived from the rouge lexer for BBC BASIC by bavison.
 # https://github.com/rouge-ruby/rouge/blob/master/lib/rouge/lexers/bbcbasic.rb
-name: BBC BASIC
+#
+name: BBC BASIC Modern Syntax
 file_extensions:
   - "bbcbasic"
   - "fd1"
