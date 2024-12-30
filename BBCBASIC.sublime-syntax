@@ -1,0 +1,144 @@
+%YAML 1.2
+---
+# BBC BASIC Syntax Highlighting Rules for Sublime Text
+# Copyright (c) 2024, 7th software Ltd.
+# All rights reserved.
+#
+# These rules were derived from the rouge lexer for BBC BASIC by bavison.
+# https://github.com/rouge-ruby/rouge/blob/master/lib/rouge/lexers/bbcbasic.rb
+name: BBC BASIC
+file_extensions:
+  - "bbcbasic"
+  - "fd1"
+  - "bas"
+scope: source.bbcbasic
+contexts:
+  main:
+    # Rule 1: Star command at the start of a line
+    - match: '^\s*\*(.*)$'
+      scope: punctuation.text keyword.cli-command.text
+      captures:
+        1: punctuation.text  # The '*' character
+        2: keyword.cli-command  # The command after '*'
+
+    # Rule 2: Star command after a colon (start of a statement)
+    - match: '^\s*:(\s*\*)(.*)$'
+      scope: punctuation.text keyword.cli-command.text
+      captures:
+        1: punctuation.text  # The ':' character
+        2: punctuation.text  # The '*' character
+        3: keyword.cli-command  # The command after '*'
+
+    # Rule 3: Star command following (ELSE|OTHERWISE|REPEAT|THEN), ignoring spaces
+    - match: '^\s*(ELSE|OTHERWISE|REPEAT|THEN)\s*(\*)(.*)$'
+      scope: keyword.text punctuation.text keyword.cli-command.text
+      captures:
+        1: keyword  # The control statement (ELSE, OTHERWISE, etc.)
+        2: punctuation.text  # The '*' character
+        3: keyword.cli-command  # The command after '*'
+
+    - match: '[ \n]+'
+      scope: text
+    - match: '[:(),;]+'
+      scope: punctuation
+    - match: '((<<|<=|<>|<|>=|>>>|>>|>|[-!$()*+/=?^.|])|(\b(AND|DIV|EOR|MOD|NOT|OR)\b))'
+      scope: operator
+    - match: '\['
+      scope: keyword.assembly1
+      push: assembly1
+    - match: '^\s*REM\s*>.*'
+      scope: comment.special
+      when: first_line
+    - match: 'REM.*'
+      scope: comment
+    - match: 'PROC[\w`@]+'
+      scope: procedure
+    - match: 'FN[\w`@]+'
+      scope: function
+    - match: '(?:(?:BGET#|CHR\$|EOF#|EXT#|GET\$#|GET\$|INKEY\$|LEFT\$|MID\$|PTR#|REPORT\$|RIGHT\$|STR\$|STRING\$|TIME\$)|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|HIMEM|INKEY|INSTR|INT|LEN|LN|LOG|LOMEM|OPENIN|OPENOUT|OPENUP|PAGE|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TIME|TOP|USR|VAL|VPOS)\b)'
+      scope: name.builtin
+    - match: '(FALSE|PI|TRUE)\b'
+      scope: name.constant
+    - match: '"[^"]*"'
+      scope: string.quoted.double
+    - match: '@%'
+      scope: name.variable
+    - match: '[\d.]+'
+      scope: constant.numeric
+    - match: '%[01]+'
+      scope: constant.numeric.binary
+    - match: '&[\h]+'
+      scope: constant.numeric.hex
+    - match: '((BPUT#|CLOSE#|INPUT#|PRINT#)|(BEATS|BY|CALL|CASE|CIRCLE|CHAIN|CLEAR|CLG|CLS|COLOR|COLOUR|DATA|DIM|DEF|DRAW|ELLIPSE|ELSE|ENDCASE|ENDIF|ENDPROC|ENDWHILE|END|ENVELOPE|ERROR|FILL|FN|FOR|GCOL|GOSUB|GOTO|IF|INPUT|INSTALL|LET|LIBRARY|LINE|LOCAL|MODE|MOUSE|MOVE|NEXT|OFF|OF|ON|ORIGIN|OSCLI|OTHERWISE|OVERLAY|PLOT|PRINTTAB|PRINT|PROC|QUIT|READ|RECTANGLE|REPEAT|REPORT|RESTORE|RETURN|RUN|SOUND|STEP|STEREO|STOP|SWAP|SYS|THEN|TINT|TO|TRACE|VDU|VOICES|VOICE|UNTIL|WAIT|WHEN|WHILE|WIDTH)\b)'
+      scope: keyword
+    - match: '[A-Za-z_`][\w`]*[$%]?'
+      scope: name.variable
+    - match: '[,;\''~] SPC TAB'
+      scope: punctuation
+      push: expression
+
+  expression:
+    - match: '\b(?:(?:BGET#|CHR\$|EOF#|EXT#|GET\$#|GET\$|INKEY\$|LEFT\$|MID\$|PTR#|REPORT\$|RIGHT\$|STR\$|STRING\$|TIME\$)|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|HIMEM|INKEY|INSTR|INT|LEN|LN|LOG|LOMEM|OPENIN|OPENOUT|OPENUP|PAGE|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TIME|TOP|USR|VAL|VPOS)\b)'
+      scope: name.builtin
+    - match: '((<<|<=|<>|<|>=|>>>|>>|>|[-!$()*+/=?^.|])|(\b(AND|DIV|EOR|MOD|NOT|OR)\b))'
+      scope: operator
+    - match: '(FALSE|PI|TRUE)\b'
+      scope: name.constant
+    - match: '"[^"]*"'
+      scope: string.quoted.double
+    - match: '[A-Za-z_`][\w`]*[$%]?'
+      scope: name.variable
+    - match: '@%'
+      scope: name.variable
+    - match: '[\d.]+'
+      scope: constant.numeric
+    - match: '%[01]+'
+      scope: constant.numeric.binary
+    - match: '&[\h]+'
+      scope: constant.numeric.hex
+
+  assembly1:
+    - match: ' +'
+      scope: text
+    - match: '\]'
+      scope: keyword.assembly1
+      pop: true
+    - match: '[:\n]'
+      scope: punctuation
+    - match: '\.[A-Za-z_`][\w`]*%? *'
+      scope: name.label
+    - match: '(?:REM|;)[^:\n]*'
+      scope: comment
+    - match: '[^ :\n]+'
+      scope: keyword.assembly2
+      push: assembly2
+
+  assembly2:
+    - match: ' +'
+      scope: text
+    - match: '[:\n]'
+      scope: punctuation
+      pop: true
+    - match: '(?:REM|;)[^:\n]*'
+      scope: comment
+      pop: true
+    - match: '\b(?:(?:BGET#|CHR\$|EOF#|EXT#|GET\$#|GET\$|INKEY\$|LEFT\$|MID\$|PTR#|REPORT\$|RIGHT\$|STR\$|STRING\$|TIME\$)|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|HIMEM|INKEY|INSTR|INT|LEN|LN|LOG|LOMEM|OPENIN|OPENOUT|OPENUP|PAGE|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TIME|TOP|USR|VAL|VPOS)\b)'
+      scope: name.builtin
+    - match: '((<<|<=|<>|<|>=|>>>|>>|>|[-!$()*+/=?^.|])|(\b(AND|DIV|EOR|MOD|NOT|OR)\b))'
+      scope: operator
+    - match: '(FALSE|PI|TRUE)\b'
+      scope: name.constant
+    - match: '"[^"]*"'
+      scope: string.quoted.double
+    - match: '[A-Za-z_`][\w`]*[$%]?'
+      scope: name.variable
+    - match: '@%'
+      scope: name.variable
+    - match: '[\d.]+'
+      scope: constant.numeric
+    - match: '%[01]+'
+      scope: constant.numeric.binary
+    - match: '&[\h]+'
+      scope: constant.numeric.hex
+    - match: '[!#,@\[\]^{}]'
+      scope: punctuation
