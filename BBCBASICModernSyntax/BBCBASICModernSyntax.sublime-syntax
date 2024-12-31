@@ -56,8 +56,10 @@ contexts:
       scope: name.procedure
     - match: 'FN[\w`@]+'
       scope: name.function
-    - match: '\b(?:(?:BGET#|CHR\$|EOF#|GET\$#|GET\$|INKEY\$|LEFT\$|MID\$|REPORT\$|RIGHT\$|STR\$|STRING\$)|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|INKEY|INSTR|INT|LEN|LN|LOG|OPENIN|OPENOUT|OPENUP|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TOP|USR|VAL|VPOS)\b)'
-      scope: name.builtin
+    - match: '\b(?:(?:CHR|GET|INKEY|LEFT|MID|REPORT|RIGHT|STR|STRING)\$|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|INKEY|INSTR|INT|LEN|LN|LOG|OPENIN|OPENOUT|OPENUP|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TOP|USR|VAL|VPOS)\b)'
+      scope: name.builtin.function
+    - match: '\b(?:(?:BGET#|EOF#|GET\$#)|(?:OPENIN|OPENOUT|OPENUP)\b)'
+      scope: name.builtin.file-io
     - match: '\b(?:(?:EXT#|PTR#|TIME\$)|(?:HIMEM|LOMEM|PAGE|TIME)\b)'
       scope: name.builtin.pseudo-variable
     - match: '(FALSE|PI|TRUE)\b'
@@ -99,8 +101,10 @@ contexts:
   expression:
     - match: '((<<|<=|<>|<|>=|>>>|>>|>|[-!$()*+/=?^.|])|(\b(AND|DIV|EOR|MOD|NOT|OR)\b))'
       scope: operator
-    - match: '\b(?:(?:BGET#|CHR\$|EOF#|GET\$#|GET\$|INKEY\$|LEFT\$|MID\$|REPORT\$|RIGHT\$|STR\$|STRING\$)|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|INKEY|INSTR|INT|LEN|LN|LOG|OPENIN|OPENOUT|OPENUP|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TOP|USR|VAL|VPOS)\b)'
-      scope: name.builtin
+    - match: '\b(?:(?:CHR|GET|INKEY|LEFT|MID|REPORT|RIGHT|STR|STRING)\$|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|INKEY|INSTR|INT|LEN|LN|LOG|OPENIN|OPENOUT|OPENUP|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TOP|USR|VAL|VPOS)\b)'
+      scope: name.builtin.function
+    - match: '\b(?:(?:BGET#|EOF#|GET\$#)|(?:OPENIN|OPENOUT|OPENUP)\b)'
+      scope: name.builtin.file-io
     - match: '\b(?:(?:EXT#|PTR#|TIME\$)|(?:HIMEM|LOMEM|PAGE|TIME)\b)'
       scope: name.builtin.pseudo-variable
     - match: '(FALSE|PI|TRUE)\b'
@@ -143,8 +147,10 @@ contexts:
     - match: '(?:REM|;|\\)[^:\n]*'
       scope: comment.assembly
       pop: true
-    - match: '\b(?:(?:BGET#|CHR\$|EOF#|GET\$#|GET\$|INKEY\$|LEFT\$|MID\$|REPORT\$|RIGHT\$|STR\$|STRING\$)|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|INKEY|INSTR|INT|LEN|LN|LOG|OPENIN|OPENOUT|OPENUP|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TOP|USR|VAL|VPOS)\b)'
-      scope: name.builtin
+    - match: '\b(?:(?:CHR|GET|INKEY|LEFT|MID|REPORT|RIGHT|STR|STRING)\$|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|INKEY|INSTR|INT|LEN|LN|LOG|OPENIN|OPENOUT|OPENUP|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TOP|USR|VAL|VPOS)\b)'
+      scope: name.builtin.function
+    - match: '\b(?:(?:BGET#|EOF#|GET\$#)|(?:OPENIN|OPENOUT|OPENUP)\b)'
+      scope: name.builtin.file-io
     - match: '\b(?:(?:EXT#|PTR#|TIME\$)|(?:HIMEM|LOMEM|PAGE|TIME)\b)'
       scope: name.builtin.pseudo-variable
     - match: '((<<|<=|<>|<|>=|>>>|>>|>|[-!$()*+/=?^.|])|(\b(AND|DIV|EOR|MOD|NOT|OR)\b))'
