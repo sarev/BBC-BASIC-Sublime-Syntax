@@ -45,19 +45,21 @@ contexts:
     - match: '((<<|<=|<>|<|>=|>>>|>>|>|[-!$()*+/=?^.|])|(\b(AND|DIV|EOR|MOD|NOT|OR)\b))'
       scope: operator
     - match: '\['
-      scope: keyword.assembly1
-      push: assembly1
+      scope: keyword.assembly-opcode
+      push: assembly-opcode
     - match: '^\s*REM\s*>.*'
-      scope: comment.special
+      scope: comment.line.special
       when: first_line
     - match: 'REM.*'
-      scope: comment
+      scope: comment.line
     - match: 'PROC[\w`@]+'
-      scope: procedure
+      scope: name.procedure
     - match: 'FN[\w`@]+'
-      scope: function
-    - match: '(?:(?:BGET#|CHR\$|EOF#|EXT#|GET\$#|GET\$|INKEY\$|LEFT\$|MID\$|PTR#|REPORT\$|RIGHT\$|STR\$|STRING\$|TIME\$)|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|HIMEM|INKEY|INSTR|INT|LEN|LN|LOG|LOMEM|OPENIN|OPENOUT|OPENUP|PAGE|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TIME|TOP|USR|VAL|VPOS)\b)'
+      scope: name.function
+    - match: '\b(?:(?:BGET#|CHR\$|EOF#|GET\$#|GET\$|INKEY\$|LEFT\$|MID\$|REPORT\$|RIGHT\$|STR\$|STRING\$)|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|INKEY|INSTR|INT|LEN|LN|LOG|OPENIN|OPENOUT|OPENUP|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TOP|USR|VAL|VPOS)\b)'
       scope: name.builtin
+    - match: '\b(?:(?:EXT#|PTR#|TIME\$)|(?:HIMEM|LOMEM|PAGE|TIME)\b)'
+      scope: name.builtin.pseudo-variable
     - match: '(FALSE|PI|TRUE)\b'
       scope: name.constant
     - match: '"[^"]*"'
@@ -70,7 +72,23 @@ contexts:
       scope: constant.numeric.binary
     - match: '&[\h]+'
       scope: constant.numeric.hex
-    - match: '((BPUT#|CLOSE#|INPUT#|PRINT#)|(BEATS|BY|CALL|CASE|CIRCLE|CHAIN|CLEAR|CLG|CLS|COLOR|COLOUR|DATA|DIM|DEF|DRAW|ELLIPSE|ELSE|ENDCASE|ENDIF|ENDPROC|ENDWHILE|END|ENVELOPE|ERROR|FILL|FN|FOR|GCOL|GOSUB|GOTO|IF|INPUT|INSTALL|LET|LIBRARY|LINE|LOCAL|MODE|MOUSE|MOVE|NEXT|OFF|OF|ON|ORIGIN|OSCLI|OTHERWISE|OVERLAY|PLOT|PRINTTAB|PRINT|PROC|QUIT|READ|RECTANGLE|REPEAT|REPORT|RESTORE|RETURN|RUN|SOUND|STEP|STEREO|STOP|SWAP|SYS|THEN|TINT|TO|TRACE|VDU|VOICES|VOICE|UNTIL|WAIT|WHEN|WHILE|WIDTH)\b)'
+    - match: '(BPUT#|CLOSE#|INPUT#|PRINT#)'
+      scope: keyword.file-io
+    - match: '((ENDWHILE|FOR|NEXT|REPEAT|STEP|TO|UNTIL|WHILE)\b)'
+      scope: keyword.iteration
+    - match: '((CALL|GOSUB|GOTO|RETURN|RUN)\b)'
+      scope: keyword.branch
+    - match: '((CASE|ELSE|ENDCASE|ENDIF|IF|OF|OTHERWISE|THEN|WHEN)\b)'
+      scope: keyword.conditional
+    - match: '((CIRCLE|CLG|DRAW|ELLIPSE|FILL|GCOL|LINE|MODE|MOVE|ORIGIN|PLOT|RECTANGLE|TINT|VDU)\b)'
+      scope: keyword.graphics
+    - match: '((BEATS|ENVELOPE|SOUND|STEREO|VOICES|VOICE)\b)'
+      scope: keyword.sound
+    - match: '((CLS|COLOR|COLOUR|INPUT|PRINTTAB|PRINT|WIDTH)\b)'
+      scope: keyword.text-io
+    - match: '((APPEND|AUTO|CHAIN|CRUNCH|DELETE|EDITO|EDIT|HELP|INSTALL|LIST|LISTO|LOAD|LVAR|NEW|OLD|RENUMBER|SAVE|TEXTLOAD|TEXTSAVEO|TEXTSAVE|TWINO|TWIN)\b)'
+      scope: keyword.command
+    - match: '((BEATS|BY|CLEAR|CLOSE|DATA|DIM|DEF|ENDPROC|END|ERROR|EXT|FN|INSTALL|LET|LIBRARY|LOCAL|MOUSE|OFF|ON|OSCLI|OVERLAY|PROC|QUIT|READ|REPORT|RESTORE|STOP|SWAP|SYS|TRACE|WAIT)\b)'
       scope: keyword
     - match: '[A-Za-z_`][\w`]*[$%]?'
       scope: name.variable
@@ -79,10 +97,12 @@ contexts:
       push: expression
 
   expression:
-    - match: '\b(?:(?:BGET#|CHR\$|EOF#|EXT#|GET\$#|GET\$|INKEY\$|LEFT\$|MID\$|PTR#|REPORT\$|RIGHT\$|STR\$|STRING\$|TIME\$)|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|HIMEM|INKEY|INSTR|INT|LEN|LN|LOG|LOMEM|OPENIN|OPENOUT|OPENUP|PAGE|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TIME|TOP|USR|VAL|VPOS)\b)'
-      scope: name.builtin
     - match: '((<<|<=|<>|<|>=|>>>|>>|>|[-!$()*+/=?^.|])|(\b(AND|DIV|EOR|MOD|NOT|OR)\b))'
       scope: operator
+    - match: '\b(?:(?:BGET#|CHR\$|EOF#|GET\$#|GET\$|INKEY\$|LEFT\$|MID\$|REPORT\$|RIGHT\$|STR\$|STRING\$)|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|INKEY|INSTR|INT|LEN|LN|LOG|OPENIN|OPENOUT|OPENUP|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TOP|USR|VAL|VPOS)\b)'
+      scope: name.builtin
+    - match: '\b(?:(?:EXT#|PTR#|TIME\$)|(?:HIMEM|LOMEM|PAGE|TIME)\b)'
+      scope: name.builtin.pseudo-variable
     - match: '(FALSE|PI|TRUE)\b'
       scope: name.constant
     - match: '"[^"]*"'
@@ -98,11 +118,11 @@ contexts:
     - match: '&[\h]+'
       scope: constant.numeric.hex
 
-  assembly1:
+  assembly-opcode:
     - match: ' +'
       scope: text
     - match: '\]'
-      scope: keyword.assembly1
+      scope: keyword.assembly-opcode
       pop: true
     - match: '[:\n]'
       scope: punctuation
@@ -111,20 +131,22 @@ contexts:
     - match: '(?:REM|;)[^:\n]*'
       scope: comment
     - match: '[^ :\n]+'
-      scope: keyword.assembly2
-      push: assembly2
+      scope: keyword.assembly-operands
+      push: assembly-operands
 
-  assembly2:
+  assembly-operands:
     - match: ' +'
       scope: text
     - match: '[:\n]'
       scope: punctuation
       pop: true
-    - match: '(?:REM|;)[^:\n]*'
-      scope: comment
+    - match: '(?:REM|;|\\)[^:\n]*'
+      scope: comment.assembly
       pop: true
-    - match: '\b(?:(?:BGET#|CHR\$|EOF#|EXT#|GET\$#|GET\$|INKEY\$|LEFT\$|MID\$|PTR#|REPORT\$|RIGHT\$|STR\$|STRING\$|TIME\$)|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|HIMEM|INKEY|INSTR|INT|LEN|LN|LOG|LOMEM|OPENIN|OPENOUT|OPENUP|PAGE|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TIME|TOP|USR|VAL|VPOS)\b)'
+    - match: '\b(?:(?:BGET#|CHR\$|EOF#|GET\$#|GET\$|INKEY\$|LEFT\$|MID\$|REPORT\$|RIGHT\$|STR\$|STRING\$)|(?:ABS|ACS|ADVAL|ASC|ASN|ATN|BEATS|BEAT|COS|COUNT|DEG|DIM|ERL|ERR|EVAL|EXP|FN|GET|INKEY|INSTR|INT|LEN|LN|LOG|OPENIN|OPENOUT|OPENUP|POINT|POS|RAD|RND|SGN|SIN|SQR|SUM|SUMLEN|TAN|TEMPO|TOP|USR|VAL|VPOS)\b)'
       scope: name.builtin
+    - match: '\b(?:(?:EXT#|PTR#|TIME\$)|(?:HIMEM|LOMEM|PAGE|TIME)\b)'
+      scope: name.builtin.pseudo-variable
     - match: '((<<|<=|<>|<|>=|>>>|>>|>|[-!$()*+/=?^.|])|(\b(AND|DIV|EOR|MOD|NOT|OR)\b))'
       scope: operator
     - match: '(FALSE|PI|TRUE)\b'
